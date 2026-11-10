@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en" dir="ltr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Student Progress Tracker</title>
+<style>
+:root{--bg:#f2f4f9;--cd:#fff;--tx:#0f1b2d;--mu:#64718a;--ac:#2557d6;--nv:#0f2a4a;--nv2:#1b4a86;--ok:#12906a;--wa:#c27a00;--bad:#d03a3a;--bd:#e2e7f0;--sf:#f6f8fc;--sh:0 1px 2px rgba(15,27,45,.06),0 6px 18px rgba(15,27,45,.06);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1220;--cd:#151d2e;--tx:#e8edf6;--mu:#92a0b8;--ac:#6f95ff;--ok:#38c79a;--wa:#f0b040;--bad:#ff7a7a;--bd:#25304a;--sf:#1b2438;--sh:0 1px 2px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#0c1220;--cd:#151d2e;--tx:#e8edf6;--mu:#92a0b8;--ac:#6f95ff;--ok:#38c79a;--wa:#f0b040;--bad:#ff7a7a;--bd:#25304a;--sf:#1b2438;--sh:0 1px 2px rgba(0,0,0,.4)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+header{background:linear-gradient(135deg,var(--nv),var(--nv2));color:#fff;padding:18px 16px 56px}
+.brand{max-width:760px;margin:auto;display:flex;gap:12px;align-items:center}.logo{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.16);display:grid;place-items:center;font:700 22px Georgia,serif}
+.brand b{display:block;font-size:18px;letter-spacing:.2px}.brand small{opacity:.78;font-size:12.5px}
+#app{max-width:760px;margin:-40px auto 0;padding:0 12px 96px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px}.chip{white-space:nowrap;border:0;border-radius:999px;padding:8px 16px;background:rgba(255,255,255,.92);color:#0f2a4a;font-weight:600;box-shadow:var(--sh)}.chip.on{background:var(--ac);color:#fff}
+button,input,select,textarea{font:inherit;color:var(--tx);border:1px solid var(--bd);background:var(--cd);border-radius:12px;padding:10px 12px}button{cursor:pointer}
+.card{background:var(--cd);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--sh)}.card h3{margin:0 0 12px;font-size:15px}
+.kp{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.k{background:var(--cd);border-radius:14px;padding:12px;box-shadow:var(--sh)}.k b{display:block;font-size:22px;line-height:1.2}.k span{font-size:11.5px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px}
+@media(max-width:520px){.kp{grid-template-columns:repeat(2,1fr)}}
+table{width:100%;border-collapse:collapse}th{font-size:11.5px;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;text-align:left;padding:0 4px 8px}td{padding:9px 4px;border-top:1px solid var(--bd)}tr.c{cursor:pointer}tr.c:active{background:var(--sf)}
+.av{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;color:#fff;font-weight:700;font-size:13px;flex:none}.who{display:flex;align-items:center;gap:10px;min-width:0}.who span:last-child{overflow-wrap:anywhere;line-height:1.25}
+.bd{display:inline-block;padding:3px 10px;border-radius:999px;font-weight:700;font-size:13px}.ok{color:var(--ok)}.wa{color:var(--wa)}.bad{color:var(--bad)}.mu{color:var(--mu);font-size:13px}
+.b-ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}.b-wa{background:color-mix(in srgb,var(--wa) 16%,transparent);color:var(--wa)}.b-bad{background:color-mix(in srgb,var(--bad) 15%,transparent);color:var(--bad)}.b-no{background:var(--sf);color:var(--mu)}
+.bar{height:8px;border-radius:4px;background:var(--bd);overflow:hidden}.bar i{display:block;height:100%;border-radius:4px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid var(--bd)}.row:first-of-type{border:0}.row input{width:84px;text-align:center;font-weight:600}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;font-size:12.5px;color:var(--mu);font-weight:600}label input,label select,label textarea{width:100%;margin-top:4px;font-weight:400}textarea{min-height:76px}
+.seg{display:flex;background:var(--sf);border-radius:12px;padding:4px;margin-bottom:12px}.seg button{flex:1;border:0;background:none;border-radius:9px;font-weight:600;color:var(--mu)}.seg button.on{background:var(--cd);color:var(--ac);box-shadow:var(--sh)}
+.pri{width:100%;background:var(--ac);color:#fff;border:0;font-weight:700;padding:13px;margin-top:4px}.sec{background:var(--sf);font-weight:600}
+.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--cd);border-top:1px solid var(--bd);padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}.tabs button{flex:1;border:0;background:none;color:var(--mu);font-size:12px;font-weight:600;padding:4px;display:grid;gap:2px;justify-items:center}.tabs button.on{color:var(--ac)}.tabs i{font-style:normal;font-size:20px}
+.al{border-left:4px solid var(--bad)}.tag{display:inline-block;margin:0 6px 6px 0}.hero{display:flex;gap:14px;align-items:center}.hero .av{width:56px;height:56px;font-size:20px}.hero h2{margin:0;font-size:19px;line-height:1.25}
+.pr{display:none}@media print{header,.tabs,.np,.chips{display:none!important}body{background:#fff}#app{margin:0;max-width:none}.card,.k{box-shadow:none;border:1px solid #ddd;break-inside:avoid}.pr{display:block;margin-bottom:12px;border-bottom:2px solid #0f2a4a;padding-bottom:8px}}
+</style></head><body>
+<header class="np"><div class="brand"><div class="logo">Σ</div><div><b>Student Progress Tracker</b><small>Mathematics · International Public Schools, Alexandria</small></div></div></header>
+<div id="app"></div>
+<script>
+const D={"Class 1":[]};
+let S=null;try{S=JSON.parse(localStorage.getItem('st1'))}catch(e){}
+if(!S||!S.classes)S={classes:D,recs:[]};
+const save=()=>{try{localStorage.setItem('st1',JSON.stringify(S))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const f0=x=>x==null?'–':Math.round(x)+'%';
+const cl=p=>p==null?'no':p>=75?'ok':p>=60?'wa':'bad';
+const keys=()=>Object.keys(S.classes);
+const fd=d=>new Date(d+'T00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+const ini=n=>n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return h};
+const av=n=>`<span class="av" style="background:hsl(${hue(n)} 48% 42%)">${esc(ini(n))}</span>`;
+let v={p:'cls',c:keys()[0],s:0,e:null,log:''};
+const pct=(r,n)=>r.scores[n]==null?null:r.scores[n]/r.max*100;
+const recs=c=>S.recs.filter(r=>r.cls==c).sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:a.id-b.id);
+function info(c,n){const ser=[];recs(c).forEach(r=>{const p=pct(r,n);if(p!=null)ser.push({r,p,ca:mean(S.classes[c].map(m=>pct(r,m)).filter(x=>x!=null))})});
+const ps=ser.map(s=>s.p),k=ps.length,avg=mean(ps);let tr=0;
+if(k>=4)tr=mean(ps.slice(-2))-mean(ps.slice(-4,-2));else if(k>=2)tr=ps[k-1]-ps[k-2];
+const fl=[];if(avg!=null&&avg<60)fl.push('Overall average is below 60%');
+if(k>=2&&ps[k-1]-ps[k-2]<=-20)fl.push('Sharp drop in the latest assessment');
+if(k>=3&&ps[k-1]<ps[k-2]&&ps[k-2]<ps[k-3])fl.push('Declined in two consecutive assessments');
+return{ser,avg,tr,fl,k,last:k?ps[k-1]:null}}
+const go=(p,s)=>{v.p=p;if(s!=null)v.s=s;render();scrollTo(0,0)};
+const sc=i=>{v.c=keys()[i];if(v.e){v.e.vals={};v.log=''}render()};
+const chips=()=>`<div class="chips np">${keys().map((k,i)=>`<button class="chip ${k==v.c?'on':''}" onclick="sc(${i})">${esc(k)}</button>`).join('')}</div>`;
+const tabs=()=>`<div class="tabs np">${[['cls','▦','Class'],['entry','✎','Enter grades'],['set','⚙','Settings']].map(([p,i,t])=>`<button class="${v.p==p||(v.p=='stu'&&p=='cls')?'on':''}" onclick="go('${p}')"><i>${i}</i>${t}</button>`).join('')}</div>`;
+const tl=r=>(r.type=='quiz'?'Weekly Quiz':'Monthly Assessment')+(r.topic?' · '+esc(r.topic):'');
+const bg=p=>`<span class="bd b-${cl(p)}">${f0(p)}</span>`;
+function spark(a){a=a.slice(-8);if(a.length<2)return '';const w=64,h=22,x=i=>2+i*(w-4)/(a.length-1),y=p=>h-2-p*(h-4)/100;return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="${a.map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(p).toFixed(1)).join('')}" fill="none" stroke="var(--ac)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`}
+function cls(){const c=v.c,L=S.classes[c].map((n,i)=>({n,i,...info(c,n)})),R=recs(c),ca=mean(L.filter(x=>x.avg!=null).map(x=>x.avg)),na=L.filter(x=>x.fl.length).length;
+const ar=t=>t>5?'<b class="ok">▲</b>':t<-5?'<b class="bad">▼</b>':'<b class="mu">●</b>';
+return chips()+`<div class="kp"><div class="k"><b>${L.length}</b><span>Students</span></div><div class="k"><b class="${cl(ca)}">${f0(ca)}</b><span>Class average</span></div><div class="k"><b>${R.length}</b><span>Assessments</span></div><div class="k"><b class="${na?'bad':''}">${na}</b><span>Need attention</span></div></div>
+<div class="card"><h3>${esc(c)} · Students</h3>${L.length?`<table><tr><th>Student</th><th>Average</th><th>Trend</th><th></th></tr>${L.map(x=>`<tr class="c" onclick="go('stu',${x.i})"><td><div class="who">${av(x.n)}<span>${x.fl.length?'⚠️ ':''}${esc(x.n)}</span></div></td><td>${bg(x.avg)}</td><td>${spark(x.ser.map(s=>s.p))}</td><td>${x.k>1?ar(x.tr):''}</td></tr>`).join('')}</table><p class="mu">Tap a student for the full profile and parent report. ⚠️ = needs follow-up.</p>`:'<p class="mu">No students yet. Add them from Settings.</p>'}</div>
+<div class="card"><h3>Assessment log</h3>${R.length?R.slice().reverse().map(r=>`<div class="row"><span><b>${tl(r)}</b><br><span class="mu">${fd(r.date)} · class average ${f0(mean(S.classes[c].map(n=>pct(r,n)).filter(x=>x!=null)))} · out of ${r.max}</span></span><button class="np sec" onclick="del(${r.id})">Delete</button></div>`).join('')+'<button class="np sec" style="margin-top:10px;width:100%" onclick="cp()">Copy table for Excel</button>':'<p class="mu">No grades recorded yet. Open “Enter grades” to start.</p>'}</div>`}
+function del(id){if(confirm('Delete this assessment?')){S.recs=S.recs.filter(r=>r.id!=id);save();render()}}
+function cp(){const c=v.c,R=recs(c);const t=['Name\t'+R.map(r=>r.date+' '+(r.type=='quiz'?'Quiz':'Assessment')+' '+(r.topic||'')+' /'+r.max).join('\t')].concat(S.classes[c].map(n=>n+'\t'+R.map(r=>r.scores[n]??'').join('\t'))).join('\n');
+navigator.clipboard.writeText(t).then(()=>alert('Copied. Paste into Excel.'),()=>alert('Copy is not available here.'))}
+function chart(ser){const W=340,H=180,P=28,n=ser.length,x=i=>P+(n<2?(W-2*P)/2:i*(W-2*P)/(n-1)),y=p=>H-P-p*(H-2*P)/100;
+const ln=a=>a.map((p,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(p).toFixed(1)).join('');
+return `<svg viewBox="0 0 ${W} ${H}" width="100%">${[0,50,100].map(g=>`<line x1="${P}" x2="${W-P}" y1="${y(g)}" y2="${y(g)}" stroke="var(--bd)"/><text x="2" y="${y(g)+4}" font-size="10" fill="var(--mu)">${g}%</text>`).join('')}<path d="${ln(ser.map(s=>s.p))} L${x(n-1)} ${y(0)} L${x(0)} ${y(0)}Z" fill="var(--ac)" opacity=".10"/><path d="${ln(ser.map(s=>s.ca))}" fill="none" stroke="var(--mu)" stroke-width="1.6" stroke-dasharray="4 3"/><path d="${ln(ser.map(s=>s.p))}" fill="none" stroke="var(--ac)" stroke-width="2.6" stroke-linejoin="round"/>${ser.map((s,i)=>`<circle cx="${x(i)}" cy="${y(s.p)}" r="4" fill="var(--cd)" stroke="var(--ac)" stroke-width="2.4"/><text x="${x(i)}" y="${y(s.p)-9}" font-size="10" font-weight="700" text-anchor="middle" fill="var(--tx)">${Math.round(s.p)}</text>${n<=7?`<text x="${x(i)}" y="${H-8}" font-size="9" text-anchor="middle" fill="var(--mu)">${fd(s.r.date)}</text>`:''}`).join('')}</svg>`}
+function stu(){const c=v.c,n=S.classes[c][v.s],x=info(c,n),q=x.ser.filter(s=>s.r.type=='quiz'),a=x.ser.filter(s=>s.r.type!='quiz'),T={};
+x.ser.forEach(s=>{const t=(s.r.topic||'').trim();if(t)(T[t]=T[t]||[]).push(s.p)});
+const tp=Object.entries(T).map(([t,z])=>[t,mean(z)]).sort((p,q)=>p[1]-q[1]),weak=tp.filter(t=>t[1]<60),strong=tp.filter(t=>t[1]>=75);
+const ca=mean(x.ser.map(s=>s.ca)),df=x.avg!=null&&ca!=null?x.avg-ca:null,first=n.split(' ')[0];
+const tr=x.k<2?'':x.tr>5?'Performance is improving.':x.tr<-5?'Performance is declining.':'Performance is steady.';
+const sm=x.k?`${esc(first)} is averaging ${f0(x.avg)} across ${x.k} assessment${x.k>1?'s':''}${ca!=null?` (class average ${f0(ca)})`:''}. ${tr}${weak.length?` Needs support in ${weak.map(w=>esc(w[0])).join(', ')}.`:''}${strong.length?` Strong in ${strong.map(w=>esc(w[0])).join(', ')}.`:''}`:'No grades recorded yet.';
+return `<div class="np" style="padding:6px 0 12px"><button class="chip" onclick="go('cls')">← ${esc(c)}</button></div><div class="pr"><b>Student Progress Report</b> · Mathematics · International Public Schools, Alexandria · ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}</div>
+<div class="card"><div class="hero">${av(n)}<div><h2>${esc(n)}</h2><div class="mu">${esc(c)} · Year 4 · Mathematics</div></div></div></div>
+${x.k?`<div class="kp"><div class="k"><b class="${cl(x.avg)}">${f0(x.avg)}</b><span>Overall</span></div><div class="k"><b>${f0(mean(q.map(s=>s.p)))}</b><span>Quizzes</span></div><div class="k"><b>${f0(mean(a.map(s=>s.p)))}</b><span>Assessments</span></div><div class="k"><b class="${df==null?'':df>=0?'ok':'bad'}">${df==null?'–':(df>=0?'+':'')+Math.round(df)}</b><span>vs class (pts)</span></div></div>
+<div class="card"><h3>Summary</h3><p style="margin:0">${sm}</p></div>
+<div class="card"><h3>Progress over time</h3>${chart(x.ser)}<div class="mu">Solid line: student · dashed line: class average</div></div>`:'<div class="card mu">No grades recorded yet.</div>'}
+${x.fl.length?`<div class="card al"><h3>⚠️ Alerts</h3>${x.fl.map(f=>'• '+f).join('<br>')}</div>`:''}
+${tp.length?`<div class="card"><h3>Performance by topic</h3>${tp.map(([t,p])=>`<div style="margin-bottom:10px"><div class="row" style="border:0;padding:0 0 4px"><span>${esc(t)}</span>${bg(p)}</div><div class="bar"><i style="width:${p}%;background:var(--${p>=75?'ok':p>=60?'wa':'bad'})"></i></div></div>`).join('')}</div>`:x.k?'<p class="mu">Record a topic with each assessment to see strengths and weaknesses.</p>':''}
+${x.k?`<div class="card"><h3>All grades</h3>${x.ser.slice().reverse().map(s=>`<div class="row"><span>${tl(s.r)}<br><span class="mu">${fd(s.r.date)}</span></span><span><b>${s.r.scores[n]}</b><span class="mu"> / ${s.r.max}</span></span></div>`).join('')}</div><div class="pr" style="margin-top:28px;border:0">Teacher signature: ______________________ &nbsp; Parent signature: ______________________</div><button class="pri np" onclick="print()">Print / Save PDF for parents</button>`:''}`}
+function entry(){const c=v.c,e=v.e||(v.e={type:'quiz',date:new Date().toISOString().slice(0,10),topic:'',max:10,vals:{}});
+const tps=[...new Set(S.recs.map(r=>r.topic).filter(Boolean))];
+return chips()+`<div class="card"><div class="seg"><button class="${e.type=='quiz'?'on':''}" onclick="v.e.type='quiz';v.e.max=10;render()">Weekly Quiz</button><button class="${e.type!='quiz'?'on':''}" onclick="v.e.type='ass';v.e.max=30;render()">Monthly Assessment</button></div>
+<div class="g"><label>Date<input type="date" value="${e.date}" onchange="v.e.date=this.value"></label><label>Out of<input type="number" value="${e.max}" onchange="v.e.max=+this.value"></label></div>
+<label style="margin-top:10px">Topic<input list="tp" value="${esc(e.topic)}" placeholder="e.g. Shapes and angles" oninput="v.e.topic=this.value"></label><datalist id="tp">${tps.map(t=>`<option value="${esc(t)}">`).join('')}</datalist></div>
+<div class="card"><h3>Paste from Excel</h3><label>Copy a column of grades (same order as the list below) or two columns: name, grade<textarea id="px" placeholder="9&#10;7.5&#10;&#10;10"></textarea></label><button class="sec" onclick="pasx()" style="width:100%;margin-top:8px">Fill grades</button>${v.log?`<p class="mu" style="margin:8px 0 0">${v.log}</p>`:''}</div>
+<div class="card"><h3>${esc(c)} · Grades</h3>${S.classes[c].map((n,i)=>`<div class="row"><div class="who">${av(n)}<span>${esc(n)}</span></div><input inputmode="decimal" data-n="1" value="${e.vals[n]??''}" oninput="v.e.vals[S.classes[v.c][${i}]]=this.value" onkeydown="nx(event)"></div>`).join('')}<p class="mu">Leave blank for absent students.</p></div><button class="pri" onclick="sv()">Save grades</button>`}
+function pasx(){const e=v.e,L=S.classes[v.c];let ls=px.value.replace(/\r/g,'').split('\n');while(ls.length&&ls[ls.length-1].trim()==='')ls.pop();
+if(!ls.length)return alert('Paste the grades first.');
+const num=s=>s.trim()===''?'':(/^\d+([.,]\d+)?$/.test(s.trim())?s.trim().replace(',','.'):null);let n=0,bad=0;
+if(ls.every(l=>num(l)!==null)){if(ls.length>L.length)return alert('You pasted '+ls.length+' grades but the class has '+L.length+' students.');ls.forEach((l,i)=>{e.vals[L[i]]=num(l);if(num(l)!=='')n++})}
+else ls.forEach(l=>{const p=l.split('\t');if(p.length<2){bad++;return}const g=num(p[p.length-1]),nm=p.slice(0,-1).join(' ').trim().toLowerCase(),m=L.filter(x=>x.toLowerCase()==nm);if(m.length==1&&g){e.vals[m[0]]=g;n++}else bad++});
+v.log=n+' grades filled'+(bad?' · '+bad+' lines not recognised':'')+'. Review before saving.';render()}
+function nx(ev){if(ev.key=='Enter'){ev.preventDefault();const i=[...document.querySelectorAll('[data-n]')];(i[i.indexOf(ev.target)+1]||ev.target).focus()}}
+function sv(){const e=v.e,c=v.c,s={};let bad=0;
+S.classes[c].forEach(n=>{const x=e.vals[n];if(x==null||String(x).trim()==='')return;const g=parseFloat(String(x).replace(',','.'));if(isNaN(g)||g<0||g>e.max)bad++;else s[n]=g});
+if(bad)return alert(bad+' grade(s) are invalid (not a number or above the maximum).');
+if(!Object.keys(s).length)return alert('There are no grades to save.');
+S.recs.push({id:Date.now(),cls:c,type:e.type,date:e.date,topic:e.topic.trim(),max:e.max,scores:s});save();v.e=null;v.log='';go('cls')}
+function set(){return `<div class="card"><h3>Add a class</h3><label>Class name<input id="cn" placeholder="Year 3 A"></label><label style="margin-top:10px">Student names (one per line, paste from Excel)<textarea id="cl"></textarea></label><button class="pri" style="margin-top:10px" onclick="addc()">Add class</button></div>
+<div class="card"><h3>Backup</h3><p class="mu">Data is stored privately in this browser. Copy a backup regularly and keep it somewhere safe.</p><button class="sec" onclick="navigator.clipboard.writeText(JSON.stringify(S)).then(()=>alert('Backup copied.'),()=>alert('Copy is not available here.'))">Copy backup</button><label style="margin-top:12px">Restore (paste a backup)<textarea id="rs"></textarea></label><button class="sec" style="margin-top:8px" onclick="rst()">Restore</button></div>`}
+function addc(){const n=cn.value.trim(),L=cl.value.split('\n').map(x=>x.trim()).filter(Boolean);if(!n||!L.length)return alert('Enter a class name and the student names.');if(S.classes['Class 1']&&!S.classes['Class 1'].length)delete S.classes['Class 1'];S.classes[n]=L;save();v.c=n;v.e=null;go('cls')}
+function rst(){try{const d=JSON.parse(rs.value);if(!d.classes||!d.recs)throw 0;if(!confirm('This replaces the current data. Continue?'))return;S=d;save();v.c=keys()[0];v.e=null;go('cls')}catch(x){alert('That backup is not valid.')}}
+function render(){document.getElementById('app').innerHTML=({cls,entry,stu,set}[v.p])()+tabs()}
+render();
+</script></body></html>
